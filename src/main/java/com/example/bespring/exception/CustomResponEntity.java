@@ -16,4 +16,16 @@ public class CustomResponEntity extends ResponseEntityExceptionHandler {
         CategoryExceptionRespone exceptionRespone = new CategoryExceptionRespone(ex.getMessage());
         return new ResponseEntity<>(exceptionRespone, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(FileNotFoundExeption.class)
+    public final ResponseEntity<Object> hanldFileNotFoundExeption(FileNotFoundExeption ex, WebRequest request){
+        ExceptionRespone exceptionRespone = new ExceptionRespone(ex.getMessage());
+        return new ResponseEntity<>(exceptionRespone, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(FileStrorageExceptionException.class)
+    public final ResponseEntity<Object> hanldFileStrorageException(FileStrorageExceptionException ex, WebRequest request){
+        ExceptionRespone exceptionRespone = new ExceptionRespone(ex.getMessage());
+        return new ResponseEntity<>(exceptionRespone, HttpStatus.BAD_REQUEST);
+    }
 }
