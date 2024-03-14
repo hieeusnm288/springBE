@@ -11,6 +11,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,7 +35,7 @@ public class BrandController {
     MapValidationErrorService mapValidationErrorService;
 
     @PostMapping("")
-    public ResponseEntity<?> insertBrand(@Valid @ModelAttribute BrandDTO dto, BindingResult bindingResult){
+    public ResponseEntity<?> insertBrand(@Valid @ModelAttribute BrandDTO dto, BindingResult bindingResult) {
         ResponseEntity<?> responseEntity = mapValidationErrorService.mapValidationFields(bindingResult);
         if (responseEntity != null) {
             return responseEntity;
@@ -45,19 +48,35 @@ public class BrandController {
     }
 
     @GetMapping("/logo/{fileName:.+}")
-    public ResponseEntity<?> loadFile(@PathVariable String fileName, HttpServletRequest httpServletRequest){
+    public ResponseEntity<?> loadFile(@PathVariable String fileName, HttpServletRequest httpServletRequest) {
         Resource resource = fileStorageService.loadLogoFileAsResource(fileName);
         String contentTye = null;
         try {
             contentTye = httpServletRequest.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw new FileStrorageExceptionException("FIle Not Fould", ex);
         }
-        if (contentTye == null){
+        if (contentTye == null) {
             contentTye = "application/octet-stream";
         }
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentTye)).header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\""
-                +resource.getFilename()+ "\"" ).body(resource);
+                + resource.getFilename() + "\"").body(resource);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<?> getListBrand() {
+        return new ResponseEntity<>(brandService.findAll(), HttpStatus.OK);
+    }
+    @GetMapping("/page")
+    public ResponseEntity<?> getListBrand(
+            @PageableDefault(size = 10, sort = "name", direction = Sort.Direction.ASC)
+            Pageable pageable){
+        return new ResponseEntity<>(brandService.findAll(pageable),HttpStatus.OK) ;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getBrandById(@PathVariable("id") Long id){
+        return new ResponseEntity<>(brandService.findById(id),HttpStatus.OK);
     }
 
 }
