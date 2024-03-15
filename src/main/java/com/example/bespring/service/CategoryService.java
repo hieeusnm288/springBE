@@ -24,7 +24,6 @@ public class CategoryService {
         if (category == null){
             throw new CategoryException("Category id " + id + " do not exist");
         }
-        System.out.println(category.getName());
         try {
 //            category.setId(id);
             category.setName(entity.getName());

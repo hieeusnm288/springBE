@@ -53,4 +53,14 @@ public class BrandService {
         }
         return brand;
     }
+
+    public void deleteBrandbyId(Long id){
+        Brand brand = brandRepository.findById(id).get();
+        if (brand.getId() == null){
+            throw new CategoryException("Không tìm thấy brand");
+        }else {
+            brandRepository.delete(brand);
+        }
+
+    }
 }

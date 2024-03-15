@@ -79,4 +79,10 @@ public class BrandController {
         return new ResponseEntity<>(brandService.findById(id),HttpStatus.OK);
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteById(@PathVariable("id") Long id){
+        brandService.deleteBrandbyId(id);
+        return new ResponseEntity<>("Xóa Brand thành công", HttpStatus.OK);
+    }
+
 }
