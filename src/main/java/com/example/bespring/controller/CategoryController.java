@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Pageable;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/category")
 public class CategoryController {
@@ -33,6 +34,7 @@ public class CategoryController {
         if (responseEntity != null){
             return responseEntity;
         }
+        System.out.println("catagoryDTO : "+ catagoryDTO);
         Category entity = new Category();
         BeanUtils.copyProperties(catagoryDTO, entity);
         entity = categoryService.save(entity);

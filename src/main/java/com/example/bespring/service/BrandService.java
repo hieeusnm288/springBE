@@ -46,6 +46,10 @@ public class BrandService {
         return brandRepository.findAll(pageable);
     }
 
+    public Page<Brand> findByName(String name,Pageable pageable){
+        return brandRepository.findByNameContainsIgnoreCase(name,pageable);
+    }
+
     public Brand findById(Long id){
         Brand brand = brandRepository.findById(id).get();
         if (brand.getId() == null){
@@ -61,6 +65,21 @@ public class BrandService {
         }else {
             brandRepository.delete(brand);
         }
-
     }
+
+    public Brand updateBrand(Long id, BrandDTO dto){
+        Brand brand = brandRepository.findById(id).get();
+        if (brand.getId() == null) {
+            throw new CategoryException("Brand không tồn tại");
+        }
+        Brand entity = new Brand();
+        BeanUtils.copyProperties(dto, entity);
+        if (dto.getLogoFile() != null) {
+            String filename = fileStorageService.storeLogoFile(dto.getLogoFile());
+            entity.setLogo(filename);
+            dto.setLogoFile(null);
+        }
+        return brandRepository.save(entity);
+    }
+
 }
