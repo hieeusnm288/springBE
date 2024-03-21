@@ -27,7 +27,7 @@ public class CategoryService {
         try {
 //            category.setId(id);
             category.setName(entity.getName());
-            category.setStatus(category.getStatus());
+            category.setStatus(entity.getStatus());
             return categoryRepository.save(category);
         }catch (Exception ex){
             throw new CategoryException("Category is updated fail");
