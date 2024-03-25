@@ -57,8 +57,20 @@ public class ProductService {
     }
 
     public Page<Product> getList(String name, Long idCate, Long idBrand, Pageable pageable){
-        return productRepository.findByNameContainsIgnoreCaseAndCategory_IdNotAndBrand_IdNot(name, idCate, idBrand,pageable);
+        if (name != null && !name.isEmpty()) {
+            System.out.println("Service " +name);
+            return productRepository.findByNameContainsIgnoreCase(name,pageable);
+        } else if (idCate != null && idBrand != null) {
+            return productRepository.findByCategory_IdAndBrand_Id(idCate, idBrand,pageable);
+        } else if (idCate != null) {
+            return productRepository.findByCategory_Id(idCate,pageable);
+        } else if (idBrand != null) {
+            return productRepository.findByBrand_Id(idBrand,pageable);
+        } else {
+            return productRepository.findAll(pageable);
+        }
     }
+
 
     public Product findById(int id){
         return productRepository.findById(id).get();

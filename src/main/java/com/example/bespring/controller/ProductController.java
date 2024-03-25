@@ -34,12 +34,13 @@ public class ProductController {
     @Autowired
     MapValidationErrorService mapValidationErrorService;
 
-    @GetMapping("/find")
-    public ResponseEntity<?> getListProduct(@RequestParam("query") String query , @RequestParam("idcate") Long idcate, @RequestParam("idbrand") Long idbrand,
+    @GetMapping("/search")
+    public ResponseEntity<?> getListProduct(@RequestParam(required = false) String name , @RequestParam(required = false) Long categoryId,@RequestParam(required = false) Long brandId,
                                           @PageableDefault(size = 10, sort = "name", direction = Sort.Direction.ASC)
                                           Pageable pageable)
     {
-        return new ResponseEntity<>(productService.getList(query,idcate,idbrand, pageable), HttpStatus.OK);
+        System.out.println(name);
+        return new ResponseEntity<>(productService.getList(name,categoryId,brandId, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
