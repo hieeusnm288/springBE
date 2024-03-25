@@ -41,7 +41,6 @@ public class BrandController {
         if (responseEntity != null) {
             return responseEntity;
         }
-        System.out.println("dto: " +dto);
         Brand entity = brandService.insertBrand(dto);
         dto.setId(entity.getId());
         dto.setName(entity.getName());

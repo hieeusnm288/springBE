@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/category")
@@ -39,7 +41,8 @@ public class CategoryController {
         BeanUtils.copyProperties(catagoryDTO, entity);
         entity = categoryService.save(entity);
         catagoryDTO.setId(entity.getId());
-        return new ResponseEntity<>(catagoryDTO, HttpStatus.CREATED);
+//        return new ResponseEntity<>(catagoryDTO, HttpStatus.CREATED);
+        return ResponseEntity.ok().body("Thêm mới thành công");
     }
 
     @PutMapping("/{id}")
@@ -52,8 +55,8 @@ public class CategoryController {
     }
 
     @GetMapping()
-    public ResponseEntity<?> getListCategory(){
-        return new ResponseEntity<>(categoryService.findAll(),HttpStatus.OK) ;
+    public ResponseEntity<List<Category>> getListCategory(){
+            return ResponseEntity.ok(categoryService.findAll());
     }
 
     @GetMapping("/page")
@@ -61,7 +64,7 @@ public class CategoryController {
             @PageableDefault(size = 5, sort = "name", direction = Sort.Direction.ASC)
             Pageable pageable){
 
-        return new ResponseEntity<>(categoryService.findAllPage(pageable),HttpStatus.OK) ;
+        return ResponseEntity.ok().body(categoryService.findAllPage(pageable)) ;
     }
 
     @GetMapping("/{id}")
