@@ -72,7 +72,7 @@ public class BrandService {
         if (brand.getId() == null) {
             throw new CategoryException("Brand không tồn tại");
         }
-        System.out.println("123" + dto.getLogoFile());
+
         Brand entity = new Brand();
         BeanUtils.copyProperties(dto, entity);
         if (dto.getLogoFile() != null) {
@@ -80,10 +80,10 @@ public class BrandService {
             if (filename != null){
                 entity.setLogo(filename);
             }
-            if (filename == null){
-                entity.setLogo(brand.getLogo());
-            }
             dto.setLogoFile(null);
+        }else{
+
+            entity.setLogo(brand.getLogo());
         }
 
         return brandRepository.save(entity);
