@@ -48,6 +48,12 @@ public class ProductController {
         return ResponseEntity.ok(productService.findById(id));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable("id") int id){
+        productService.deleteById(id);
+        return ResponseEntity.ok("Xóa thành công");
+    }
+
     @PostMapping()
     public ResponseEntity<?> insertProduct(@Valid @ModelAttribute ProductDTO productDTO, BindingResult result){
         ResponseEntity<?> respon = mapValidationErrorService.mapValidationFields(result);
