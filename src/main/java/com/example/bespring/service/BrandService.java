@@ -82,7 +82,6 @@ public class BrandService {
             }
             dto.setLogoFile(null);
         }else{
-
             entity.setLogo(brand.getLogo());
         }
 

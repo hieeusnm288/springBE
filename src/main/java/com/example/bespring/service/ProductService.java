@@ -90,7 +90,11 @@ public class ProductService {
         BeanUtils.copyProperties(productDTO, entity);
         if (productDTO.getProductFile() != null){
             String fileName = fileStorageService.storeLogoFile(productDTO.getProductFile());
-            entity.setImage(fileName);
+            if (fileName != null){
+                entity.setImage(fileName);
+            }else {
+                entity.setImage(product.getImage());
+            }
             productDTO.setProductFile(null);
         }
         return productRepository.save(entity);
