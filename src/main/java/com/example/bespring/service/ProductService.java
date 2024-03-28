@@ -82,12 +82,16 @@ public class ProductService {
 
     public Product update(int id, ProductDTO productDTO){
         Product product = productRepository.findById(id).get();
+        Category category = categoryService.findById(productDTO.getCategory_id());
+        Brand brand = brandService.findById(productDTO.getBrand_id());
         if (product == null){
             throw new CategoryException("Product không tồ tại");
         }
         Product entity = new Product();
         entity.setCreateDate(product.getCreateDate());
         BeanUtils.copyProperties(productDTO, entity);
+        entity.setBrand(brand);
+        entity.setCategory(category);
         if (productDTO.getProductFile() != null){
             String fileName = fileStorageService.storeLogoFile(productDTO.getProductFile());
             if (fileName != null){
