@@ -51,7 +51,7 @@ public class ProductService {
             entity.setImage(fileName);
             productDTO.setProductFile(null);
         }
-        System.out.println(entity.toString());
+
 
         return productRepository.save(entity);
     }
