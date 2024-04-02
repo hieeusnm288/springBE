@@ -96,10 +96,10 @@ public class ProductService {
             String fileName = fileStorageService.storeLogoFile(productDTO.getProductFile());
             if (fileName != null){
                 entity.setImage(fileName);
-            }else {
-                entity.setImage(product.getImage());
             }
             productDTO.setProductFile(null);
+        }else {
+            entity.setImage(product.getImage());
         }
         return productRepository.save(entity);
     }
