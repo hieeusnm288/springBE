@@ -24,6 +24,9 @@ public class Account {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @Column(name = "username", nullable = false)
+    private String username;
+
     @Column(name = "phone", nullable = false)
     private String phone;
 

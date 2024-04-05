@@ -14,5 +14,7 @@ public class AccountDTO {
     private String phone;
     @NotEmpty(message = "Password is requried")
     private String password;
+    @NotEmpty(message = "Username is requried")
+    private String username;
 
 }

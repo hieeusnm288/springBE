@@ -39,7 +39,6 @@ public class ProductController {
                                           @PageableDefault(size = 10, sort = "name", direction = Sort.Direction.ASC)
                                           Pageable pageable)
     {
-        System.out.println(name);
         return new ResponseEntity<>(productService.getList(name,categoryId,brandId, pageable), HttpStatus.OK);
     }
 
