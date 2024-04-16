@@ -20,7 +20,10 @@ public class Endpoints {
             "/api/v1/account/search",
             "/api/v1/account/{id}",
             "/api/v1/order_detail/{id}",
-            "/api/v1/order/**"
+            "/api/v1/order/**",
+            "/api/v1/product/{id}",
+            "/api/v1/brand/{id}",
+            "/api/v1/category/{id}",
     };
 
     public static final String[] ADMIN_POST_ENDPOINS = {
