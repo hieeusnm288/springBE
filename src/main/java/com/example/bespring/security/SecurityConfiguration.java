@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 public class SecurityConfiguration{
@@ -51,18 +52,12 @@ public class SecurityConfiguration{
                         .requestMatchers(HttpMethod.GET, Endpoints.GUEST_GET_ENDPOINS).hasAuthority("guest")
                         .requestMatchers(HttpMethod.POST, Endpoints.GUEST_POST_ENDPOINS).hasAuthority("guest")
         );
-    http.cors(cors -> {
-        cors.configurationSource(request -> {
-            CorsConfiguration corsConfig = new CorsConfiguration();
-            corsConfig.addAllowedOrigin(Endpoints.front_end_host);
-            corsConfig.addAllowedMethod("OPTIONS");
-            corsConfig.addAllowedMethod("GET");
-            corsConfig.addAllowedMethod("POST");
-            corsConfig.addAllowedMethod("PUT");
-            corsConfig.addAllowedMethod("DELETE");
-            corsConfig.addAllowedHeader("*");
-            return corsConfig;
-        });
+    http.cors().configurationSource(request -> {
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.setAllowedOrigins(Collections.singletonList("*"));
+        corsConfig.setAllowedMethods(Arrays.asList("OPTIONS", "GET", "POST", "PUT", "DELETE"));
+        corsConfig.setAllowedHeaders(Collections.singletonList("*"));
+        return corsConfig;
     });
     http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     http.sessionManagement((session)->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
