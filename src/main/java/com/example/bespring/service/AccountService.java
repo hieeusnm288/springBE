@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 
@@ -22,6 +23,9 @@ public class AccountService {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     public Account insert(AccountDTO accountDTO){
         List<?> foundedListEmail =  acountRepository.findByEmailContainsIgnoreCase(accountDTO.getEmail());
@@ -40,6 +44,9 @@ public class AccountService {
         Role role = roleRepository.findById(2L).get();
         BeanUtils.copyProperties(accountDTO, entity);
         entity.setRole(role);
+        // Ma hoa mat Khau
+        String encryptPassword = passwordEncoder.encode(accountDTO.getPassword());
+        entity.setPassword(encryptPassword);
         return acountRepository.save(entity);
     }
 

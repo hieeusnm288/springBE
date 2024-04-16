@@ -2,8 +2,13 @@ package com.example.bespring.controller;
 
 import com.example.bespring.domain.Category;
 import com.example.bespring.dto.AccountDTO;
+import com.example.bespring.exception.CategoryException;
+import com.example.bespring.security.JwtResponse;
+import com.example.bespring.security.LoginRequest;
 import com.example.bespring.service.AccountService;
+import com.example.bespring.service.JWTService;
 import com.example.bespring.service.MapValidationErrorService;
+import com.example.bespring.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +17,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +31,16 @@ public class AccountController {
     AccountService accountService;
     @Autowired
     MapValidationErrorService mapValidationErrorService;
+
+    @Autowired
+    private AuthenticationManager manager;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private JWTService jwtService;
+
 
     @PostMapping()
     public ResponseEntity<?> createAccount(@Valid @RequestBody AccountDTO accountDTO, BindingResult result){
@@ -63,4 +82,23 @@ public class AccountController {
         accountService.deleteAccount(id);
         return ResponseEntity.ok().body("Xóa thành công");
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
+        // Xac thuc nguoi dung bang username va password
+        try {
+            Authentication authentication = manager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+            );
+            // Neu xac thuc thah cong tao jwt
+            if (authentication.isAuthenticated()){
+                final String jwt = jwtService.generateToken(loginRequest.getUsername());
+                return ResponseEntity.ok().body(new JwtResponse(jwt));
+            }
+        }catch (AuthenticationException e){
+            return ResponseEntity.badRequest().body("Login Fail, Username or Password Incorrect");
+        }
+        return ResponseEntity.badRequest().body("Login Fail");
+    }
+
  }
