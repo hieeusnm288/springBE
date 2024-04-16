@@ -55,7 +55,11 @@ public class SecurityConfiguration{
         cors.configurationSource(request -> {
             CorsConfiguration corsConfig = new CorsConfiguration();
             corsConfig.addAllowedOrigin(Endpoints.front_end_host);
-            corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+            corsConfig.addAllowedMethod("OPTIONS");
+            corsConfig.addAllowedMethod("GET");
+            corsConfig.addAllowedMethod("POST");
+            corsConfig.addAllowedMethod("PUT");
+            corsConfig.addAllowedMethod("DELETE");
             corsConfig.addAllowedHeader("*");
             return corsConfig;
         });
